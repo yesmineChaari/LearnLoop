@@ -1,0 +1,57 @@
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.status.pending {
+    color: #ef6c00;
+}
+
+.status.confirmed {
+    color: #2e7d32;
+}
+
+.error {
+    margin-top: 8px;
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.empty {
+    margin-top: 8px;
+    background: #fafafa;
+    color: #555;
+}
+
+
+
+.error {
+    margin-top: 8px;
+    background: #ffebee;
+    color: #b71c1c;
+}
+
+.empty {
+    margin-top: 8px;
+    background: #fafafa;
+    color: #555;
+}
+
+.session-item {
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+}
+
+.session-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}

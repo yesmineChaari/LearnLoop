@@ -1,0 +1,49 @@
+<mat-list-item class="session-item">
+    <mat-icon matListItemIcon>{{ icon }}</mat-icon>
+
+    <div matListItemTitle class="f-s-16 f-w-600">
+        {{ session().title }}
+        <span class="status" [ngClass]="session().status">({{ session().status | titlecase }})</span>
+    </div>
+
+    <div matListItemLine class="f-s-14">
+        When: {{ session().scheduledAt | date: 'medium' }}
+    </div>
+
+    <div matListItemLine class="f-s-14">
+        {{ counterpartLabel }}: {{ counterpartName }}
+    </div>
+
+    <div matListItemLine class="f-s-14">
+        Teach: {{ session().subjectTeach?.name }} | Learn: {{ session().subjectLearn?.name }}
+    </div>
+
+    <div matListItemLine class="f-s-14" *ngIf="session().description">
+        Description: {{ session().description }}
+    </div>
+
+    <div class="f-s-14" *ngIf="session().link">
+        <a [href]="session().link" target="_blank" rel="noopener">Meeting Link</a>
+    </div>
+
+    <div class="f-s-14 m-t-8" *ngIf="session().documents?.length">
+        <div class="f-w-600">Documents:</div>
+        <ul class="m-l-16">
+            <li *ngFor="let d of session().documents">
+                <button mat-stroked-button color="primary" (click)="onDownload(d)">{{ d.filename }}</button>
+            </li>
+        </ul>
+    </div>
+
+    <div class="m-t-8" *ngIf="canConfirm()">
+        <button mat-flat-button color="primary" (click)="onConfirm()" [disabled]="confirming()">
+            {{ confirming() ? 'Confirming...' : 'Confirm' }}
+        </button>
+    </div>
+
+    <div class="m-t-8" *ngIf="canCancel()">
+        <button mat-flat-button color="warn" (click)="onCancel()" [disabled]="cancelling()">
+            {{ cancelling() ? 'Cancelling...' : 'Cancel' }}
+        </button>
+    </div>
+</mat-list-item>

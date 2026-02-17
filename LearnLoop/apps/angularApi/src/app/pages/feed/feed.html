@@ -1,0 +1,15 @@
+<div class="feed-container">
+  <div class="feed-wrapper">
+    <app-create-post (postCreated)="onPostCreated($event)"></app-create-post>
+    <div class="posts-section">
+      @for (post of posts(); track post.id) {
+      <app-post
+        [post]="post"
+        [currentUserId]="user().id"
+        [currentUserName]="user().name"
+        [currentUserAvatar]="user().avatar"
+      ></app-post>
+      }
+    </div>
+  </div>
+</div>

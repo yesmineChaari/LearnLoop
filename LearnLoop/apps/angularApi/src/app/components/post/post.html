@@ -1,0 +1,95 @@
+<div class="post-card">
+  <div class="post-header">
+    <div class="author-info">
+      <img
+        [src]="post.author.avatar"
+        [alt]="post.author.name"
+        class="avatar"
+        (error)="$event.target.src = 'assets/images/profile/image.png'"
+        style="cursor: pointer"
+        [routerLink]="['/users', post.author.id]"
+      />
+      <div class="author-details">
+        <h3
+          class="author-name"
+          style="cursor: pointer"
+          [routerLink]="['/users', post.author.id]"
+        >
+          {{ post.author.name }}
+        </h3>
+        <p class="author-title">{{ post.author.title }}</p>
+        <p class="timestamp">{{ post.timestamp }}</p>
+      </div>
+    </div>
+    @if (canDelete) {
+    <div class="header-actions">
+      <button
+        class="delete-btn"
+        (click)="deletePost()"
+        [disabled]="isDeleting()"
+        title="Delete post"
+      >
+        <i-tabler name="trash" class="icon"></i-tabler>
+      </button>
+    </div>
+    }
+  </div>
+
+  <div class="post-content">
+    <p class="text">{{ post.content }}</p>
+    @if (post.image) {
+    <img [src]="post.image" [alt]="post.author.name" class="post-image" />
+    }
+  </div>
+
+  <div class="post-footer">
+    <button
+      class="like-btn"
+      (click)="likePost()"
+      [class.liked]="post.isLiked"
+      [disabled]="isLoadingLike()"
+    >
+      <i-tabler name="thumb-up" class="icon"></i-tabler>
+      <span class="like-count">{{ post.likesCount }}</span>
+    </button>
+
+    <button
+      class="comment-btn"
+      (click)="toggleComments()"
+      [class.active]="showComments()"
+    >
+      <i-tabler name="message-circle" class="icon"></i-tabler>
+      <span class="comment-count">{{ commentCount() }}</span>
+    </button>
+  </div>
+
+  @if (showComments()) {
+  <div class="comments-section">
+    <div class="comments-divider"></div>
+
+    <app-comment-form
+      [postId]="post.id"
+      [userAvatar]="currentUserAvatar"
+      [userName]="currentUserName"
+      (commentCreated)="onCommentCreated($event)"
+    ></app-comment-form>
+
+    @if (isLoadingComments()) {
+    <div class="loading-comments">Loading comments...</div>
+    } @if (!isLoadingComments() && comments().length === 0) {
+    <div class="no-comments">No comments yet. Be the first to comment!</div>
+    } @if (!isLoadingComments() && comments().length > 0) {
+    <div class="comments-list">
+      @for (comment of comments(); track comment.id) {
+      <app-comment
+        [comment]="comment"
+        [currentUserId]="currentUserId"
+        (commentDeleted)="onCommentDeleted($event)"
+        (commentUpdated)="onCommentUpdated($event)"
+      ></app-comment>
+      }
+    </div>
+    }
+  </div>
+  }
+</div>

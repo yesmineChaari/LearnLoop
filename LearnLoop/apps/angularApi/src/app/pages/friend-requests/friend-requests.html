@@ -1,0 +1,53 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+    <mat-card-title>Some People Want To Connect With You!</mat-card-title>
+
+    <div class="col-lg-6">
+      <mat-card class="b-1 shadow-none">
+
+          <mat-list>
+          @for (request of pendingRequestList; track $index) {
+            <mat-list-item class="b-t-1">
+
+              <img matListItemAvatar
+              [src]="request.profileImage"
+              [alt]="request.name"
+              class="avatar"
+              (error)="$event.target.src = 'assets/images/profile/image.png'"
+              style="cursor: pointer"
+              [routerLink]="['/users', request.id]"
+              />
+              
+              <span matListItemTitle class="f-s-16 f-w-600" style="cursor: pointer"
+              [routerLink]="['/users', request.id]">
+                {{ request.name || request.name }}
+              </span>
+
+
+              
+
+              <div matListItemMeta>
+                @if(request.id){
+                  <button mat-flat-button color="primary" class="m-r-8" (click)="acceptRequest(request.id)">
+                    Accept
+                  </button>
+                  
+                  <button mat-flat-button  class="redButton" (click)="declineRequest(request.id)">
+                    Decline
+                  </button>
+                }
+              </div>
+
+            </mat-list-item>
+          }
+
+          @if (pendingRequestList.length === 0) {
+            <p class="p-16">No pending requests.</p>
+          }
+
+            </mat-list>
+      </mat-card>
+    </div>
+
+  </mat-card-content>
+</mat-card>

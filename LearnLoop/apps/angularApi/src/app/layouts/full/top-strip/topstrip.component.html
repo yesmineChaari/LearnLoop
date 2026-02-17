@@ -1,0 +1,43 @@
+<div
+  class="app-topstrip bg-dark text-white p-y-16 p-x-24 w-100 d-flex align-items-center justify-content-between"
+>
+  <!-- App Name -->
+  <div class="d-flex align-items-center">
+    <img
+      src="/assets/images/logos/mainLogo.png"
+      alt="LearnLoop Logo"
+      class="ml-2"
+      width="40"
+      height="40"
+    />
+    <h2 class="text-white m-0 f-w-600">LearnLoop</h2>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="d-flex align-items-center grow m-x-24">
+    <mat-form-field
+      style="margin-top: 16px; margin-left: 130px; max-width: 60%"
+      class="w-100"
+      appearance="outline"
+    >
+      <input matInput placeholder="Search..." class="text-white" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" />
+      <mat-icon matPrefix class="text-white">search</mat-icon>
+    </mat-form-field>
+    <button mat-icon-button color="primary" (click)="onSearch()" aria-label="Search">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+
+  <!-- Right Icons -->
+  <div class="d-flex align-items-center gap-16">
+    <!-- Messages Icon -->
+    <button style="cursor: pointer;" [routerLink]="['/chat/connections']" mat-icon-button class="text-white">
+      <mat-icon>message</mat-icon>
+    </button>
+
+    <!-- Profile Icon -->
+    <button mat-icon-button class="text-white" routerLink="/profile">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </div>
+</div>

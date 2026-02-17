@@ -1,0 +1,27 @@
+.error {
+    margin-top: 12px;
+    padding: 8px;
+    background: #ffebee;
+    color: #c62828;
+}
+
+.success {
+    margin-top: 12px;
+    padding: 8px;
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.upload-control {
+    display: flex;
+    align-items: center;
+}
+
+.upload-control .mat-mdc-button .mat-icon {
+    font-size: 18px;
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+}

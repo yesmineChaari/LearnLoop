@@ -1,0 +1,76 @@
+<div class="comment-card">
+  <div class="comment-header">
+    <div class="author-info">
+      <img
+        [src]="comment.user?.profileImage || 'assets/images/profile/image.png'"
+        [alt]="comment.user?.name || 'User'"
+        class="avatar"
+        (error)="$event.target.src = 'assets/images/profile/image.png'"
+        style="cursor: pointer"
+        [routerLink]="['/users', comment.user?.id]"
+      />
+      <div class="comment-details">
+        <h4
+          class="author-name"
+          style="cursor: pointer"
+          [routerLink]="['/users', comment.user?.id]"
+        >
+          {{ comment.user?.name || 'Unknown' }}
+        </h4>
+        <p class="timestamp">{{ getTimestamp() }}</p>
+      </div>
+    </div>
+    @if (isAuthor()) {
+    <div class="comment-actions">
+      <button
+        class="action-btn edit-btn"
+        (click)="toggleEdit()"
+        [disabled]="isDeleting()"
+        title="Edit"
+      >
+        <i-tabler name="edit"></i-tabler>
+      </button>
+      <button
+        class="action-btn delete-btn"
+        (click)="deleteComment()"
+        [disabled]="isDeleting() || isUpdating()"
+        title="Delete"
+      >
+        <i-tabler name="trash"></i-tabler>
+      </button>
+    </div>
+    }
+  </div>
+
+  <div class="comment-content">
+    @if (!isEditing()) {
+    <div class="text">{{ comment.content }}</div>
+    } @else {
+    <div class="edit-form">
+      <textarea
+        class="edit-textarea"
+        [ngModel]="editContent()"
+        (ngModelChange)="editContent.set($event)"
+        placeholder="Edit your comment..."
+        maxlength="5000"
+      ></textarea>
+      <div class="edit-actions">
+        <button
+          class="btn-save"
+          (click)="saveEdit()"
+          [disabled]="isUpdating() || !(editContent() || '').trim()"
+        >
+          {{ isUpdating() ? 'Saving...' : 'Save' }}
+        </button>
+        <button
+          class="btn-cancel"
+          (click)="toggleEdit()"
+          [disabled]="isUpdating()"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+    }
+  </div>
+</div>

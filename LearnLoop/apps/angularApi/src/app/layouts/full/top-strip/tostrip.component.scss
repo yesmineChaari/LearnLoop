@@ -1,0 +1,29 @@
+// Blinking animation for notification icon
+.blink-animation {
+  animation: blink 0.5s ease-in-out 4; // Blinks 4 times in 2 seconds
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
+}
+
+// Optional: Pulse animation (smoother alternative)
+.blink-animation {
+  animation: pulse 0.5s ease-in-out 4;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+  }
+}

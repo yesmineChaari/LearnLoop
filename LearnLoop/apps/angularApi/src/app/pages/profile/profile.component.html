@@ -1,0 +1,164 @@
+<div class="blank-layout-container justify-content-center bg-light">
+  <div class="profile-page-column">
+    <div class="col-lg-6">
+      <mat-card class="cardWithShadow">
+        <mat-card-content class="p-32 text-center">
+          <!-- PROFILE IMAGE -->
+          <img
+            [src]="
+              user?.profileImage || 'assets/images/profile/default-avatar.png'
+            "
+            class="profile-img"
+            width="120 "
+            alt="profile"
+          />
+
+          <!-- VIEW MODE -->
+          <ng-container *ngIf="!isEditing">
+            <h2 class="m-t-16">{{ user?.name }}</h2>
+            <p class="text-muted m-t-8">{{ user?.bio || 'No bio yet' }}</p>
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="m-t-16"
+              (click)="edit()"
+            >
+              Edit Profile
+            </button>
+          </ng-container>
+
+          <!-- EDIT MODE -->
+          <ng-container *ngIf="isEditing">
+            <mat-form-field appearance="outline" class="w-100 m-t-16">
+              <mat-label>Name</mat-label>
+              <input matInput [(ngModel)]="draftUser.name" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Bio</mat-label>
+              <textarea
+                matInput
+                rows="3"
+                [(ngModel)]="draftUser.bio"
+              ></textarea>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Profile Image URL</mat-label>
+              <input matInput [(ngModel)]="draftUser.profileImage" />
+            </mat-form-field>
+
+            <div class="d-flex justify-content-between m-t-16">
+              <button mat-stroked-button (click)="cancel()">Cancel</button>
+              <button mat-flat-button color="primary" (click)="save()">
+                Save
+              </button>
+            </div>
+          </ng-container>
+
+          <button mat-button color="warn" class="m-t-24" (click)="logout()">
+            Logout
+          </button>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="cardWithShadow p-32">
+        <!-- VIEW MODE -->
+        <ng-container *ngIf="!isEditingSkills">
+          <section class="profile-section">
+            <h3>Skills I Can Teach</h3>
+            <div class="skills-list">
+              <span
+                class="skill-chip"
+                *ngFor="let name of skillsToTeachNames"
+                >{{ name }}</span
+              >
+            </div>
+          </section>
+
+          <section class="profile-section">
+            <h3>Skills I Want to Learn</h3>
+            <div class="skills-list">
+              <span
+                class="skill-chip"
+                *ngFor="let name of skillsToLearnNames"
+                >{{ name }}</span
+              >
+            </div>
+          </section>
+
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="startEditingSkills()"
+          >
+            Edit Skills
+          </button>
+        </ng-container>
+
+        <!-- EDIT MODE -->
+        <ng-container *ngIf="isEditingSkills">
+          <section class="profile-section">
+            <h3>Skills I Can Teach</h3>
+            <div class="skills-list">
+              <mat-checkbox
+                *ngFor="let skill of skills"
+                [checked]="skillsToTeach.includes(skill.id)"
+                (change)="toggleSkillToTeach(skill.id)"
+              >
+                {{ skill.name }}
+              </mat-checkbox>
+            </div>
+          </section>
+
+          <section class="profile-section">
+            <h3>Skills I Want to Learn</h3>
+            <div class="skills-list">
+              <mat-checkbox
+                *ngFor="let skill of skills"
+                [checked]="skillsToLearn.includes(skill.id)"
+                (change)="toggleSkillToLearn(skill.id)"
+              >
+                {{ skill.name }}
+              </mat-checkbox>
+            </div>
+          </section>
+
+          <!-- Save / Cancel Buttons -->
+          <div class="d-flex justify-content-between m-t-16">
+            <button mat-stroked-button (click)="cancelEditingSkills()">
+              Cancel
+            </button>
+            <button mat-flat-button color="primary" (click)="saveSkills()">
+              Save Skills
+            </button>
+          </div>
+        </ng-container>
+      </mat-card>
+
+      <!-- ================= USER POSTS ================= -->
+      <mat-card class="cardWithShadow m-t-24">
+        <mat-card-content class="p-24">
+          <h3 class="m-b-16">Posts</h3>
+
+          <!-- No posts -->
+          <p *ngIf="posts?.length === 0" class="text-muted text-center">
+            No posts yet
+          </p>
+
+          <!-- Posts list -->
+          <div *ngFor="let post of posts" class="m-b-16">
+            <app-post
+              [post]="post"
+              [currentUserId]="currentUserId"
+              [currentUserName]="currentUserName"
+              [currentUserAvatar]="currentUserAvatar"
+              [canDelete]="true"
+              (postDeleted)="removePost($event)"
+            ></app-post>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

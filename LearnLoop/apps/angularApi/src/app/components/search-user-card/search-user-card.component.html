@@ -1,0 +1,121 @@
+<mat-card class="search-user-card" (click)="onCardClick()">
+  <!-- User Header Section -->
+  <div class="card-header">
+    <div class="user-avatar">
+      <img 
+        [src]="user.profileImage || '/assets/images/profile/user-1.jpg'" 
+        [alt]="user.name + ' profile'"
+        class="avatar-img"
+        (error)="onImageError($event)"
+      />
+    </div>
+    <div class="user-info">
+      <h3 class="user-name">{{ user.name }}</h3>
+      <p class="user-bio" *ngIf="user.bio">{{ user.bio | slice:0:100 }}{{ user.bio.length > 100 ? '...' : '' }}</p>
+    </div>
+  </div>
+
+  <!-- Skills Section -->
+  <div class="skills-section">
+    <!-- Skills Known (Can Teach) -->
+    <div class="skill-group" *ngIf="user.skillsKnown.length > 0">
+      <div class="skill-label">
+        <mat-icon class="skill-icon teach">school</mat-icon>
+        <span>Can teach:</span>
+      </div>
+      <div class="skill-chips">
+        <mat-chip *ngFor="let skill of user.skillsKnown.slice(0, 4)" class="skill-chip teach">
+          {{ skill }}
+        </mat-chip>
+        <mat-chip *ngIf="user.skillsKnown.length > 4" class="skill-chip more">
+          +{{ user.skillsKnown.length - 4 }} more
+        </mat-chip>
+      </div>
+    </div>
+
+    <!-- Skills Learning (Wants to Learn) -->
+    <div class="skill-group" *ngIf="user.skillsLearning.length > 0">
+      <div class="skill-label">
+        <mat-icon class="skill-icon learn">auto_stories</mat-icon>
+        <span>Wants to learn:</span>
+      </div>
+      <div class="skill-chips">
+        <mat-chip *ngFor="let skill of user.skillsLearning.slice(0, 4)" class="skill-chip learn">
+          {{ skill }}
+        </mat-chip>
+        <mat-chip *ngIf="user.skillsLearning.length > 4" class="skill-chip more">
+          +{{ user.skillsLearning.length - 4 }} more
+        </mat-chip>
+      </div>
+    </div>
+
+    <!-- No skills message -->
+    <div class="no-skills" *ngIf="user.skillsKnown.length === 0 && user.skillsLearning.length === 0">
+      <mat-icon>info_outline</mat-icon>
+      <span>No skills listed yet</span>
+    </div>
+  </div>
+
+  <!-- Action Section -->
+  <div class="card-actions" (click)="$event.stopPropagation()">
+    <!-- Already Friends -->
+    <button 
+      *ngIf="connectionStatus === 'accepted'"
+      mat-stroked-button 
+      color="primary"
+      class="status-btn friends"
+      [routerLink]="['/users', user.id]"
+    >
+      <mat-icon>people</mat-icon>
+      <span>Friends</span>
+    </button>
+
+    <!-- Request Pending (sent by current user) -->
+    <button 
+      *ngIf="connectionStatus === 'pending'"
+      mat-stroked-button 
+      class="status-btn pending"
+      disabled
+    >
+      <mat-icon>hourglass_empty</mat-icon>
+      <span>Request Sent</span>
+    </button>
+
+    <!-- Waiting for approval (received request) -->
+    <button 
+      *ngIf="connectionStatus === 'waiting-for-current-user-approval'"
+      mat-flat-button 
+      color="accent"
+      class="status-btn respond"
+      [routerLink]="['/friend-request']"
+    >
+      <mat-icon>notification_important</mat-icon>
+      <span>Respond to Request</span>
+    </button>
+
+    <!-- No connection - Send Request -->
+    <button 
+      *ngIf="connectionStatus === 'nothing-sent' || connectionStatus === 'declined'"
+      mat-flat-button 
+      color="primary"
+      class="status-btn connect"
+      [disabled]="isLoadingConnection"
+      (click)="onSendRequestClick()"
+    >
+      <mat-spinner *ngIf="isLoadingConnection" diameter="20"></mat-spinner>
+      <mat-icon *ngIf="!isLoadingConnection">person_add</mat-icon>
+      <span *ngIf="!isLoadingConnection">Connect</span>
+    </button>
+
+    <!-- View Profile Button -->
+    <button 
+      mat-icon-button 
+      color="primary"
+      [routerLink]="['/users', user.id]"
+      matTooltip="View Profile"
+      class="view-profile-btn"
+    >
+      <mat-icon>visibility</mat-icon>
+    </button>
+  </div>
+</mat-card>

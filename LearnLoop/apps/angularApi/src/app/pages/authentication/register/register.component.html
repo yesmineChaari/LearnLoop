@@ -1,0 +1,52 @@
+<div class="blank-layout-container justify-content-center align-items-center bg-light">
+  <div class="position-relative row w-100 h-100 bg-gredient justify-content-center">
+    <div class="col-lg-4 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <div class="text-center">
+              <img src="./assets/images/logos/mainLogo.png" class="align-middle m-2 logo-img" alt="logo" />
+              <h2 class="m-b-8 f-s-24 f-w-700">LearnLoop</h2>
+          </div>
+          <form class="m-t-30" #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)" novalidate>
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Name</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput [(ngModel)]="name" name="name" required minlength="4"
+               #namemodel="ngModel" placeholder="Enter your name" />
+              <div *ngIf="namemodel.invalid && namemodel.touched" class="error">
+                Please enter a valid name,min length 4.
+              </div>
+            </mat-form-field>
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Email Address</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput type="email" [(ngModel)]="email" name="email"
+               required email #emailmodel="ngModel" placeholder="Enter your email" />
+              <div *ngIf="emailmodel.invalid && emailmodel.touched" class="error">
+                Please enter a valid email.
+              </div>
+            </mat-form-field>
+            <!-- password -->
+            <mat-label class="f-s-14 f-w-600 m-b-12 d-block">Password</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput type="password" [(ngModel)]="password" 
+              name="password" required minlength="6" #passwordmodel="ngModel" 
+              placeholder="Enter your password" />
+              <div *ngIf="passwordmodel.invalid && passwordmodel.touched" class="error">
+                Please enter a valid password, min length 6.
+              </div>
+            </mat-form-field>
+
+            <button  mat-flat-button color="primary" class="w-100">
+              Sign Up
+            </button>
+            <!-- input -->
+          </form>
+          <span class="d-block f-w-500 text-center m-t-24">Already have an Account?
+
+            <a [routerLink]="['/authentication/login']" class="text-decoration-none text-primary f-w-500 f-s-14">
+              Sign In</a>
+          </span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

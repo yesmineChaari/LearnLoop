@@ -1,0 +1,325 @@
+/**
+ * Search Page Styles
+ * 
+ * This stylesheet provides styling for the search functionality including:
+ * - Search header with title
+ * - Search bar with input field
+ * - Multi-select skill filters
+ * - Active filter chips
+ * - Results grid
+ * - Loading and empty states
+ * - Pagination
+ */
+
+.search-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ==================== Header Styles ==================== */
+.search-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 0.5rem 0;
+}
+
+.title-icon {
+  font-size: 2.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #1976d2;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ==================== Search Bar Card ==================== */
+.search-bar-card {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.search-bar-container {
+  margin-bottom: 1rem;
+}
+
+.search-input {
+  width: 100%;
+  
+  ::ng-deep .mat-mdc-form-field-flex {
+    height: 56px;
+  }
+  
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: #f8f9fa;
+    border-radius: 12px;
+  }
+  
+  ::ng-deep .mdc-notched-outline__leading,
+  ::ng-deep .mdc-notched-outline__trailing,
+  ::ng-deep .mdc-notched-outline__notch {
+    border-color: transparent;
+  }
+  
+  ::ng-deep .mat-mdc-form-field.mat-focused {
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__trailing,
+    .mdc-notched-outline__notch {
+      border-color: #1976d2;
+    }
+  }
+  
+  input {
+    font-size: 1rem;
+  }
+}
+
+/* ==================== Filters Section ==================== */
+.filters-section {
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+}
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.filter-select {
+  flex: 1;
+  min-width: 200px;
+  
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+  }
+  
+  mat-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+.clear-filters-btn {
+  height: 56px;
+  margin-top: 4px;
+}
+
+/* ==================== Active Filters Display ==================== */
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.filter-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+.filter-chip {
+  font-size: 0.75rem;
+  
+  &.name-chip {
+    background-color: #e3f2fd !important;
+    color: #1565c0 !important;
+  }
+  
+  &.teach-chip {
+    background-color: #e8f5e9 !important;
+    color: #2e7d32 !important;
+  }
+  
+  &.learn-chip {
+    background-color: #fff3e0 !important;
+    color: #e65100 !important;
+  }
+}
+
+/* ==================== Results Section ==================== */
+.results-section {
+  min-height: 400px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.results-count {
+  font-size: 0.9rem;
+  color: #666;
+  
+  strong {
+    color: #1976d2;
+    font-size: 1.1rem;
+  }
+}
+
+.page-info {
+  font-size: 0.875rem;
+  color: #999;
+}
+
+/* ==================== Results Grid ==================== */
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ==================== Loading State ==================== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  
+  p {
+    margin-top: 1rem;
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+/* ==================== Empty State ==================== */
+.empty-state,
+.initial-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background: #fafafa;
+  border-radius: 16px;
+  border: 2px dashed #e0e0e0;
+}
+
+.empty-icon,
+.initial-icon {
+  font-size: 4rem;
+  width: 4rem;
+  height: 4rem;
+  color: #bdbdbd;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3,
+.initial-state h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  color: #424242;
+}
+
+.empty-state p,
+.initial-state p {
+  margin: 0 0 1.5rem 0;
+  color: #757575;
+  max-width: 400px;
+}
+
+.initial-icon {
+  color: #1976d2;
+}
+
+/* ==================== Pagination ==================== */
+.search-paginator {
+  margin-top: 1.5rem;
+  background: transparent;
+  
+  ::ng-deep .mat-mdc-paginator-container {
+    justify-content: center;
+    padding: 0;
+  }
+}
+
+/* ==================== Responsive Design ==================== */
+@media (max-width: 768px) {
+  .search-page {
+    padding: 1rem;
+  }
+  
+  .page-title {
+    font-size: 1.5rem;
+  }
+  
+  .title-icon {
+    font-size: 2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .search-bar-card {
+    padding: 1rem;
+  }
+  
+  .filters-row {
+    flex-direction: column;
+  }
+  
+  .filter-select {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .clear-filters-btn {
+    width: 100%;
+  }
+  
+  .results-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.25rem;
+    flex-direction: column;
+  }
+  
+  .active-filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

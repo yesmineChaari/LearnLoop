@@ -1,0 +1,80 @@
+<div class="create-post-container">
+  <!-- Create Post Card -->
+  <div class="create-post-card">
+    <div class="create-post-header">
+      <img [src]="currentUser.avatar" [alt]="currentUser.name" class="avatar" (error)="$event.target.src = 'assets/images/profile/image.png'" />
+      <input
+        type="text"
+        class="post-input"
+        placeholder="What's on your mind?"
+        (click)="openForm()"
+        readonly
+      />
+    </div>
+
+    <div class="create-post-actions">
+      <button class="action-icon" (click)="openForm()">
+        <i-tabler name="world" class="icon"></i-tabler>
+        <span>Share</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Post Form Modal -->
+  <div class="post-form-overlay" *ngIf="isFormOpen" (click)="closeForm()"></div>
+  <div class="post-form-modal" *ngIf="isFormOpen">
+    <div class="form-header">
+      <h2>Create a post</h2>
+      <button class="close-btn" (click)="closeForm()">
+        <i-tabler name="x" class="icon"></i-tabler>
+      </button>
+    </div>
+
+    <div class="form-content">
+      <!-- User Info -->
+      <div class="user-section">
+        <img
+          [src]="currentUser.avatar"
+          [alt]="currentUser.name"
+          class="avatar"
+          (error)="$event.target.src = 'assets/images/profile/image.png'"
+        />
+        <div>
+          <h3>{{ currentUser.name }}</h3>
+          <p>Public</p>
+        </div>
+      </div>
+
+      <!-- Content Textarea -->
+      <textarea
+        class="content-textarea"
+        [(ngModel)]="postContent"
+        placeholder="What's on your mind?"
+        rows="6"
+      ></textarea>
+
+      <!-- Image Preview & URL Input -->
+      <div class="image-section" *ngIf="postImage">
+        <img [src]="postImage" [alt]="'Post preview'" class="image-preview" />
+        <button class="remove-image-btn" (click)="postImage = ''" type="button">
+          <i-tabler name="trash" class="icon"></i-tabler>
+        </button>
+      </div>
+
+      <div class="image-input-group">
+        <label>Image URL (optional)</label>
+        <input
+          type="text"
+          class="image-url-input"
+          [(ngModel)]="postImage"
+          placeholder="Enter image URL"
+        />
+      </div>
+    </div>
+
+    <div class="form-footer">
+      <button class="cancel-btn" (click)="closeForm()">Cancel</button>
+      <button class="post-btn" (click)="submitPost()">Post</button>
+    </div>
+  </div>
+</div>

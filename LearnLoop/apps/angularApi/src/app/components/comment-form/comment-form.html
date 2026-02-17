@@ -1,0 +1,31 @@
+<div class="comment-form">
+  <div class="form-header">
+    <img
+      [src]="userAvatar || 'assets/images/profile/image.png'"
+      [alt]="userName"
+      class="avatar"
+      (error)="$event.target.src = 'assets/images/profile/image.png'"
+    />
+  </div>
+
+  <div class="form-content">
+    <textarea
+      class="comment-input"
+      [(ngModel)]="commentContent"
+      placeholder="Write a comment..."
+      maxlength="5000"
+      [disabled]="isSubmitting"
+    ></textarea>
+
+    <div class="form-footer">
+      <span class="char-count">{{ commentContent.length }} / 5000</span>
+      <button
+        class="submit-btn"
+        (click)="submitComment()"
+        [disabled]="!commentContent.trim() || isSubmitting"
+      >
+        {{ isSubmitting ? 'Posting...' : 'Post' }}
+      </button>
+    </div>
+  </div>
+</div>

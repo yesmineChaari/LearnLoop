@@ -1,0 +1,158 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">Create Study Session</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+        <form [formGroup]="form" (ngSubmit)="submit()">
+            <div class="row">
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Title</mat-label>
+                    <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input matInput formControlName="title" placeholder="Session title" />
+                        <mat-error
+                            *ngIf="form.get('title')?.hasError('required') && (form.get('title')?.touched || form.get('title')?.dirty)">Title
+                            is required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Description </mat-label>
+                    <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <textarea matInput formControlName="description" placeholder="What will you cover?" rows="4"
+                            maxlength="2000"></textarea>
+                        <mat-hint align="end">Max 2000 chars</mat-hint>
+                    </mat-form-field>
+                </div>
+
+
+
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Participant</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select formControlName="participantId">
+                            <mat-option *ngFor="let u of connections()" [value]="u.id">{{ u.name }}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('participantId')?.hasError('required') && (form.get('participantId')?.touched || form.get('participantId')?.dirty)">Participant
+                            is
+                            required</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Link </mat-label>
+                    <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input matInput type="url" formControlName="link" placeholder="https://example.com" />
+                        <mat-error
+                            *ngIf="form.get('link')?.hasError('invalidUrl') && (form.get('link')?.touched || form.get('link')?.dirty)">Enter
+                            a valid http(s)
+                            URL</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Subject to Teach</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select formControlName="subjectTeachId">
+                            <mat-option *ngFor="let s of skills()" [value]="s.id">{{ s.name }}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('subjectTeachId')?.hasError('required') && (form.get('subjectTeachId')?.touched || form.get('subjectTeachId')?.dirty)">Select
+                            a skill</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Subject to Learn</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select formControlName="subjectLearnId">
+                            <mat-option *ngFor="let s of skills()" [value]="s.id">{{ s.name }}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('subjectLearnId')?.hasError('required') && (form.get('subjectLearnId')?.touched || form.get('subjectLearnId')?.dirty)">Select
+                            a skill</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Scheduled Date</mat-label>
+                    <mat-form-field appearance="outline" class="w-100" color="primary">
+                        <input matInput [matDatepicker]="picker" formControlName="scheduledDate" [min]="minDate" />
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                        <mat-error
+                            *ngIf="form.get('scheduledDate')?.hasError('required') && (form.get('scheduledDate')?.touched || form.get('scheduledDate')?.dirty)">Date
+                            is required</mat-error>
+                        <mat-error *ngIf="form.hasError('pastDateTime') && (form.touched || form.dirty)">Scheduled time
+                            must be in the
+                            future</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-3">
+                    <mat-label class="f-w-600 m-b-8 d-block">Hour</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select formControlName="scheduledHour">
+                            <mat-option *ngFor="let h of validHours" [value]="h">{{ h | number:'2.0-0' }}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('scheduledHour')?.hasError('required') && (form.get('scheduledHour')?.touched || form.get('scheduledHour')?.dirty)">Hour
+                            is required</mat-error>
+                        <mat-error *ngIf="form.hasError('pastDateTime') && (form.touched || form.dirty)">Scheduled time
+                            must be in the
+                            future</mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-3">
+                    <mat-label class="f-w-600 m-b-8 d-block">Minute</mat-label>
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-select formControlName="scheduledMinute">
+                            <mat-option *ngFor="let m of validMinutes" [value]="m">{{ m | number:'2.0-0' }}</mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="form.get('scheduledMinute')?.hasError('required') && (form.get('scheduledMinute')?.touched || form.get('scheduledMinute')?.dirty)">Minute
+                            is
+                            required</mat-error>
+                        <mat-error *ngIf="form.hasError('pastDateTime') && (form.touched || form.dirty)">Scheduled time
+                            must be in the
+                            future</mat-error>
+                    </mat-form-field>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <mat-label class="f-w-600 m-b-8 d-block">Attach PDF </mat-label>
+                    <div class="upload-control">
+                        <button mat-stroked-button color="primary" type="button" (click)="fileInput.click()">
+                            <mat-icon class="m-r-4">attach_file</mat-icon>
+                            Upload PDF
+                        </button>
+                        <input #fileInput type="file" accept="application/pdf,application/x-pdf"
+                            (change)="onFileSelected($event)" hidden />
+                        <mat-chip-set *ngIf="selectedFile()" class="m-l-8">
+                            <mat-chip color="primary" selected>
+                                {{ selectedFile()?.name }}
+                                <button mat-icon-button matChipRemove type="button" (click)="clearSelectedFile()"
+                                    aria-label="Remove">
+                                    <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-chip>
+                        </mat-chip-set>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-t-12 actions">
+                <button mat-flat-button color="primary" class="m-r-8" type="submit"
+                    [disabled]="isSubmitting() || form.invalid">Create Session</button>
+                <button mat-stroked-button color="warn" type="button" (click)="form.reset()">Cancel</button>
+            </div>
+
+            <mat-card *ngIf="errorMessage()" class="error">{{ errorMessage() }}</mat-card>
+            <mat-card *ngIf="successMessage()" class="success">{{ successMessage() }}</mat-card>
+        </form>
+    </mat-card-content>
+</mat-card>

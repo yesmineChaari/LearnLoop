@@ -1,0 +1,64 @@
+<mat-card class="cardWithShadow theme-card">
+    <mat-card-header>
+        <mat-card-title class="m-b-0">My Study Sessions</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="b-t-1">
+        <div class="row">
+            <div class="col-12">
+                <div class="filters m-b-16">
+                    <mat-button-toggle-group [value]="status()" (change)="setFilter($event.value)">
+                        <mat-button-toggle value="pending">Pending</mat-button-toggle>
+                        <mat-button-toggle value="confirmed">Confirmed</mat-button-toggle>
+                        <mat-button-toggle value="all">All</mat-button-toggle>
+                    </mat-button-toggle-group>
+                    <button mat-stroked-button color="primary" (click)="load()">Refresh</button>
+                </div>
+
+                <div *ngIf="loading()" class="loading">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+
+                <mat-card *ngIf="error()" class="error b-1 shadow-none">{{ error() }}</mat-card>
+            </div>
+        </div>
+
+        <div class="row" *ngIf="!loading()">
+            <div class="col-lg-6">
+                <mat-card class="b-1 shadow-none">
+                    <mat-card-header>
+                        <mat-card-title>Invitations</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="b-t-1">
+                        <mat-list>
+                            @for(s of invitedSessions(); track s.id) {
+                            <app-session-item [session]="s" mode="invited" [canConfirm]="canConfirm(s)"
+                                [canCancel]="canCancel(s)" [confirming]="confirming()[s.id]"
+                                [cancelling]="cancelling()[s.id]" (confirmClick)="confirm(s)" (cancelClick)="cancel(s)"
+                                (downloadDocument)="downloadDoc(s, $event)"></app-session-item>
+                            }
+                        </mat-list>
+                        <div *ngIf="!invitedSessions().length" class="empty p-16">No invitations found.</div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+            <div class="col-lg-6">
+                <mat-card class="b-1 shadow-none">
+                    <mat-card-header>
+                        <mat-card-title>Created by Me</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="b-t-1">
+                        <mat-list>
+                            @for(s of createdSessions(); track s.id) {
+                            <app-session-item [session]="s" mode="created" [canCancel]="canCancel(s)"
+                                [cancelling]="cancelling()[s.id]" (cancelClick)="cancel(s)"
+                                (downloadDocument)="downloadDoc(s, $event)"></app-session-item>
+                            }
+                        </mat-list>
+                        <div *ngIf="!createdSessions().length" class="empty p-16">No created sessions found.</div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

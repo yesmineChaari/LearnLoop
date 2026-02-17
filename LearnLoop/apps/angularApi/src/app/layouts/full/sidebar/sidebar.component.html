@@ -1,0 +1,29 @@
+<div class="p-t-24"></div>
+@if(showToggle) {
+<div class="d-flex align-items-center justify-content-end p-16">
+  <a
+    href="javascript:void(0)"
+    (click)="toggleMobileNav.emit()"
+    class="d-flex justify-content-center ng-star-inserted icon-40 align-items-center"
+  >
+    <i-tabler name="x" class="icon-20 d-flex"></i-tabler>
+  </a>
+</div>
+}
+
+<ul>
+  @for(item of navItems; track item) {
+    <li *ngIf="item.displayName === 'Logout'">
+      <a href="javascript:void(0)" (click)="onLogout()">
+        <i-tabler name="logout" class="icon-20"></i-tabler>
+        {{item.displayName}}
+      </a>
+    </li>
+    <li *ngIf="item.displayName !== 'Logout'">
+      <a [routerLink]="item.route">
+        <i-tabler [name]="item.iconName || ''" class="icon-20"></i-tabler>
+        {{item.displayName}}
+      </a>
+    </li>
+  }
+</ul>

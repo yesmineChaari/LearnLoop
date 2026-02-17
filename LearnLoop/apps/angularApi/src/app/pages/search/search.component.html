@@ -1,0 +1,177 @@
+<div class="search-page">
+  <!-- Search Header -->
+  <div class="search-header">
+    <h1 class="page-title">
+      <mat-icon class="title-icon">search</mat-icon>
+      Find Learning Partners
+    </h1>
+    <p class="page-subtitle">Connect with people who share your learning interests</p>
+  </div>
+
+  <!-- Search Bar Section -->
+  <mat-card class="search-bar-card">
+    <div class="search-bar-container">
+      <mat-form-field appearance="outline" class="search-input">
+        <mat-label>Search by name</mat-label>
+        <input 
+          matInput 
+          type="text"
+          [value]="searchQuery"
+          (input)="onSearchInput($event)"
+          placeholder="Enter a name to search..."
+        />
+        <mat-icon matPrefix>person_search</mat-icon>
+        <button 
+          *ngIf="searchQuery" 
+          matSuffix 
+          mat-icon-button 
+          (click)="clearSearchQuery()"
+          aria-label="Clear"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <div class="filters-row">
+        <!-- Skills Known Filter (Can Teach) -->
+        <mat-form-field appearance="outline" class="filter-select">
+          <mat-label>
+            <mat-icon>school</mat-icon>
+            Skills they can teach
+          </mat-label>
+          <mat-select 
+            [value]="selectedSkillsToTeach" 
+            (selectionChange)="onSkillsToTeachChange($event.value)"
+            multiple
+          >
+            <mat-option *ngFor="let skill of allSkills" [value]="skill.id">
+              {{ skill.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Skills Learning Filter (Wants to Learn) -->
+        <mat-form-field appearance="outline" class="filter-select">
+          <mat-label>
+            <mat-icon>auto_stories</mat-icon>
+            Skills they want to learn
+          </mat-label>
+          <mat-select 
+            [value]="selectedSkillsToLearn" 
+            (selectionChange)="onSkillsToLearnChange($event.value)"
+            multiple
+          >
+            <mat-option *ngFor="let skill of allSkills" [value]="skill.id">
+              {{ skill.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Clear Filters Button -->
+        <button 
+          mat-stroked-button 
+          color="warn"
+          class="clear-filters-btn"
+          *ngIf="hasActiveFilters"
+          (click)="clearFilters()"
+        >
+          <mat-icon>filter_alt_off</mat-icon>
+          Clear Filters
+        </button>
+      </div>
+
+      <!-- Active Filters Display -->
+      <div class="active-filters" *ngIf="hasActiveFilters">
+        <span class="filter-label">Active filters:</span>
+        
+        <mat-chip *ngIf="searchQuery" class="filter-chip name-chip" (removed)="clearSearchQuery()">
+          Name: "{{ searchQuery }}"
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        
+        <mat-chip 
+          *ngFor="let skillId of selectedSkillsToTeach" 
+          class="filter-chip teach-chip"
+          (removed)="removeSkillToTeach(skillId)"
+        >
+          Teaches: {{ getSkillName(skillId) }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        
+        <mat-chip 
+          *ngFor="let skillId of selectedSkillsToLearn" 
+          class="filter-chip learn-chip"
+          (removed)="removeSkillToLearn(skillId)"
+        >
+          Learns: {{ getSkillName(skillId) }}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </div>
+    </div>
+  </mat-card>
+
+  <!-- Results Section -->
+  <div class="results-section">
+    <!-- Results Header -->
+    <div class="results-header" *ngIf="!isLoading && !isInitialLoad">
+      <span class="results-count">
+        <strong>{{ totalUsers }}</strong> {{ totalUsers === 1 ? 'user' : 'users' }} found
+      </span>
+      <span class="page-info" *ngIf="totalPages > 1">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="48"></mat-spinner>
+      <p>Searching for users...</p>
+    </div>
+
+    <!-- Results Grid -->
+    <div class="results-grid" *ngIf="!isLoading && users.length > 0">
+      <app-search-user-card
+        *ngFor="let user of users"
+        [user]="user"
+        [connectionStatus]="getConnectionStatus(user.id)"
+        [isLoadingConnection]="isConnectionLoading(user.id)"
+        (sendRequest)="onSendRequest($event)"
+        (viewProfile)="onViewProfile($event)"
+      ></app-search-user-card>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!isLoading && !isInitialLoad && users.length === 0">
+      <mat-icon class="empty-icon">person_off</mat-icon>
+      <h3>No users found</h3>
+      <p *ngIf="hasActiveFilters">Try adjusting your search filters or clearing them to see more results.</p>
+      <p *ngIf="!hasActiveFilters">Start searching by entering a name or selecting skill filters above.</p>
+      <button mat-flat-button color="primary" *ngIf="hasActiveFilters" (click)="clearFilters()">
+        <mat-icon>refresh</mat-icon>
+        Clear All Filters
+      </button>
+    </div>
+
+    <!-- Initial State -->
+    <div class="initial-state" *ngIf="!isLoading && isInitialLoad && users.length === 0">
+      <mat-icon class="initial-icon">manage_search</mat-icon>
+      <h3>Start your search</h3>
+      <p>Enter a name or select skills to find learning partners</p>
+    </div>
+
+    <!-- Pagination -->
+    <mat-paginator 
+      *ngIf="!isLoading && totalUsers > 0"
+      [length]="totalUsers"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="currentPage - 1"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+      class="search-paginator"
+    ></mat-paginator>
+  </div>
+</div>

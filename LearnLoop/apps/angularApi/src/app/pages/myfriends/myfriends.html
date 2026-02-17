@@ -1,0 +1,41 @@
+<mat-card class="cardWithShadow">
+  <mat-card-content>
+      <mat-card-title>My Friends</mat-card-title>
+    <div class="col-lg-6">
+      <mat-card class="b-1 shadow-none">
+
+          <mat-list>
+          @for (request of friendsList; track $index) {
+            <mat-list-item class="b-t-1">
+
+              <img matListItemAvatar
+              [src]="request.profileImage"
+              [alt]="request.name"
+              class="avatar"
+              (error)="$event.target.src = 'assets/images/profile/image.png'"
+              style="cursor: pointer"
+              [routerLink]="['/users', request.id]"
+              />
+              
+              <span matListItemTitle class="f-s-16 f-w-600" style="cursor: pointer"
+              [routerLink]="['/users', request.id]">
+                {{ request.name || request.name }}
+              </span>
+
+
+              
+
+            </mat-list-item>
+          }
+
+          @if (friendsList.length === 0) {
+            <p class="p-16">You have no friends at the moment.</p>
+            <p class="p-13">Search for your friends and connect with them for a better experience!</p>
+          }
+
+            </mat-list>
+      </mat-card>
+    </div>
+
+  </mat-card-content>
+</mat-card>

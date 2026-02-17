@@ -1,0 +1,19 @@
+.session-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.session-item:last-child {
+    border-bottom: none;
+}
+
+.status.pending {
+    color: #c77d0a;
+}
+
+.status.confirmed {
+    color: #2e7d32;
+}
+
+.status.canceled {
+    color: #c62828;
+}

@@ -1,0 +1,147 @@
+<mat-card class="cardWithShadow theme-card">
+  <mat-card-content class="b-t-1">
+    <div class="chat-container">
+      <!-- Error Message Display -->
+      @if (errorMessage) {
+        <div class="error-message alert alert-danger">
+          {{ errorMessage }}
+          <button type="button" (click)="errorMessage = ''" class="close">×</button>
+        </div>
+      }
+
+      <!-- Friends List Section -->
+      <div class="friends-section">
+        <div class="friends-header">
+          <h3>Your Friends</h3>
+          @if (isLoadingFriends) {
+            <span class="loading-spinner"></span>
+          }
+        </div>
+        <div class="friends-list">
+          @for (friend of friends; track $index) {
+            <mat-card class="friend-card b-1 shadow-none" (click)="selectFriend(friend)">
+              <mat-card-header class="friend-header">
+                <div class="friend-avatar">
+                    @if (friend.profileImage || friend.imagePath) {
+                      <img [src]="friend.profileImage || friend.imagePath"
+                           alt="profile" class="avatar-img"
+                           (error)="$event.target.src = 'assets/images/profile/image.png'">
+                    } @else {
+                      <div class="avatar-placeholder">{{ friend.name.charAt(0).toUpperCase() }}</div>
+                    }
+                </div>
+                <div class="friend-info">
+                  <mat-card-title class="friend-name">{{ friend.name}}</mat-card-title>
+                </div>
+              </mat-card-header>
+            </mat-card>
+          }  
+        </div>
+      </div>
+
+      <!-- Chat Section -->
+      <div class="chat-section">
+        <div class="chat-header">
+          <div class="chat-friend-info">
+            <h3>{{ selectedFriend?.name || 'Select a friend' }}</h3>
+          </div>
+          <div>
+            <button mat-icon-button color="primary">
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages List -->
+        <div class="messages-list" #messagesList>
+          @if (isLoadingConversation) {
+            <div class="loading-conversation">
+              <mat-spinner diameter="50"></mat-spinner>
+              <p>Loading conversation...</p>
+            </div>
+          } @else if (messages.length === 0) {
+            <div class="empty-conversation">
+              <p>Start chat</p>
+            </div>
+          } @else {
+            @for (msg of messages; track msg.id) {
+              <div class="message-item" [ngClass]="{ 'sent': msg.isSent, 'received': !msg.isSent }">
+                @if (!msg.isSent && selectedFriend) {
+                  <div class="message-avatar">
+                      @if (selectedFriend.profileImage || selectedFriend.imagePath) {
+                      <img [src]="selectedFriend.profileImage || selectedFriend.imagePath"
+                        alt="user" class="avatar-img"
+                        (error)="$event.target.src = 'assets/images/profile/image.png'">
+                      } @else {
+                      <div class="avatar-placeholder">{{ selectedFriend.name.charAt(0).toUpperCase() }}</div>
+                      }
+                  </div>
+                  }
+                <div class="message-content">
+                  @if (!msg.isSent) {
+                    <p class="message-meta">
+                      <span class="message-user">{{ selectedFriend?.name }}</span>
+                      <span class="message-time">{{ msg.timestamp | date:'short' }}</span>
+                    </p>
+                  }
+                  <p class="message-text" [class.temporary]="msg.isTemporary">{{ msg.text }}</p>
+                 
+                </div>
+                @if (msg.isSent) {
+                  <div class="message-avatar">
+                    <div class="avatar-placeholder">You</div>
+                  </div>
+                }
+              </div>
+            }
+          }
+        </div>
+
+        <!-- Message Input Form -->
+        <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="message-form">
+          <input #fileInput type="file" style="display: none" (change)="onFileSelected($event)" multiple />
+          
+          <!-- Attached Files List -->
+          @if (attachedFiles.length > 0) {
+            <div class="attached-files">
+              @for (file of attachedFiles; track $index) {
+                @if (file && file.name) {
+                  <div class="file-item">
+                    <mat-icon>description</mat-icon>
+                    <span class="file-name">{{ file.name }}</span>
+                    @if (file.size) {
+                      <span class="file-size">({{ (file.size / 1024).toFixed(2) }} KB)</span>
+                    }
+                    <button type="button" mat-icon-button (click)="removeAttachedFile($index)" class="remove-btn">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </div>
+                }
+              }
+            </div>
+          }
+          
+          <mat-form-field appearance="outline" class="message-input-field">
+            <mat-label>Write a message...</mat-label>
+            <textarea matInput ngModel name="message" required rows="3"></textarea>
+          </mat-form-field>
+
+          <div class="message-actions">
+            <div class="action-buttons">
+              <button type="button" mat-icon-button color="primary" matTooltip="Attachments" class="attachments-button" (click)="fileInput.click()">
+                <mat-icon>attach_file</mat-icon>
+              </button>
+            </div>
+            <div class="send-buttons">
+              <button mat-raised-button color="primary" 
+                      [disabled]="!form.value?.message?.trim() || !conversationId || isSendingMessage" 
+                      type="submit">
+                {{ isSendingMessage ? 'Sending...' : 'Send' }}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
