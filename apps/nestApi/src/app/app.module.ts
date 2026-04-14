@@ -18,6 +18,12 @@ import { Document } from '../study-sessions/documents/document.entity';
 import { Conversation } from '../chat/entities/conversation.entity';
 import { Message } from '../chat/entities/message.entity';
 
+const dbPort = Number.parseInt(process.env.DB_PORT ?? '5432', 10);
+const dbSslEnabled = (process.env.DB_SSL ?? 'false').toLowerCase() === 'true';
+const dbSslRejectUnauthorized =
+  (process.env.DB_SSL_REJECT_UNAUTHORIZED ?? 'false').toLowerCase() === 'true';
+const dbSynchronize =
+  (process.env.TYPEORM_SYNCHRONIZE ?? 'true').toLowerCase() === 'true';
 
 @Module({
   imports: [
@@ -35,7 +41,7 @@ import { Message } from '../chat/entities/message.entity';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
-      port: +process.env.DB_PORT,
+      port: dbPort,
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
       database: process.env.DB_NAME,
@@ -54,10 +60,12 @@ import { Message } from '../chat/entities/message.entity';
       ],
 
       autoLoadEntities: true,
-      ssl: {
-        rejectUnauthorized: false,
-      },
-      synchronize: true,
+      ssl: dbSslEnabled
+        ? {
+            rejectUnauthorized: dbSslRejectUnauthorized,
+          }
+        : false,
+      synchronize: dbSynchronize,
     }),
   ],
 })

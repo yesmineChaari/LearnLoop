@@ -1,0 +1,14 @@
+node_modules
+apps/angularApi/node_modules
+dist
+tmp
+.nx
+.git
+.gitignore
+.vscode
+npm-debug.log
+yarn-error.log
+Dockerfile
+**/.DS_Store
+**/Thumbs.db
+apps/nestApi/.env

@@ -1,4 +1,4 @@
-# LearnLoop 
+# LearnLoop
 
 > A peer-to-peer skill exchange platform where users can connect, teach, and learn from each other.
 
@@ -76,7 +76,7 @@ LearnLoop/
 - **Node.js** >= 18.x
 - **npm** >= 9.x or **yarn**
 - **PostgreSQL** >= 14.x
-- **Nx CLI** 
+- **Nx CLI**
 
 ### Installation
 
@@ -135,7 +135,59 @@ The app will be available at `http://localhost:4200`
 npx nx run-many --target=serve --projects=nestApi,angularApi
 ```
 
-## 📋 Features
+## Run With Docker (2 Containers)
+
+This repository now includes a Docker Desktop setup with Linux containers:
+
+- `app`: Node container running Nest API (`:3000`) and Angular app (`:4200`)
+- `db`: PostgreSQL container (`:5432`)
+
+### Start the stack
+
+```bash
+docker compose up --build
+```
+
+### Access the app
+
+- Frontend: `http://localhost:4200`
+- Backend API: `http://localhost:3000/api`
+
+### Stop the stack
+
+```bash
+docker compose down
+```
+
+### Database schema and seed scripts
+
+The DB container already ships with:
+
+1. `docker/db/init/01_schema.sql`
+2. `docker/db/init/02_seed.sql`
+
+If you want your own dataset, edit these files directly.
+
+These scripts run automatically only on first database initialization.
+
+Demo seeded login users:
+
+- `alice@learnloop.dev` / `Password123!`
+- `bob@learnloop.dev` / `Password123!`
+- `charlie@learnloop.dev` / `Password123!`
+
+If you change schema/seed later, recreate volumes:
+
+```bash
+docker compose down -v
+docker compose up --build
+```
+
+### Default startup seed
+
+On app startup, default skills are seeded when `SEED_DEFAULT_DATA=true` (enabled by default in `docker-compose.yml`).
+
+## Features
 
 ### User Management
 
@@ -166,19 +218,3 @@ npx nx run-many --target=serve --projects=nestApi,angularApi
 - Create study sessions with skill exchange
 - Session status tracking (pending/confirmed/canceled)
 - Document sharing within sessions
-
-## Testing
-
-**Run unit tests:**
-
-```bash
-npx nx test nestApi
-npx nx test angularApi
-```
-
-**Run e2e tests:**
-
-```bash
-npx nx e2e nestApi-e2e
-```
-

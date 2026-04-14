@@ -1,0 +1,7 @@
+-- Put your schema SQL in a file named 01_schema.sql.
+-- This sample file is ignored by postgres init because of the .sample suffix.
+-- Example:
+-- CREATE TABLE IF NOT EXISTS public.example (
+--   id uuid PRIMARY KEY,
+--   name text NOT NULL
+-- );

@@ -1,0 +1,5 @@
+-- Put your seed SQL in a file named 02_seed.sql.
+-- This sample file is ignored by postgres init because of the .sample suffix.
+-- Example:
+-- INSERT INTO public.example (id, name)
+-- VALUES ('00000000-0000-0000-0000-000000000001', 'demo');

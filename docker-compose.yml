@@ -1,0 +1,49 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    container_name: learnloop-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '3000:3000'
+      - '4200:4200'
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: learnloop
+      DB_PASS: learnloop
+      DB_NAME: learnloop
+      DB_SSL: 'false'
+      DB_SSL_REJECT_UNAUTHORIZED: 'false'
+      TYPEORM_SYNCHRONIZE: 'false'
+      JWT_SECRET: change_me_in_production
+      CORS_ORIGIN: http://localhost:4200
+      SEED_DEFAULT_DATA: 'true'
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    container_name: learnloop-db
+    environment:
+      POSTGRES_DB: learnloop
+      POSTGRES_USER: learnloop
+      POSTGRES_PASSWORD: learnloop
+    ports:
+      - '5432:5432'
+    volumes:
+      - learnloop_pgdata:/var/lib/postgresql/data
+      - ./docker/db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U learnloop -d learnloop']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  learnloop_pgdata:
